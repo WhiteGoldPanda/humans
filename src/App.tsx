@@ -1,34 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useState } from 'react'
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
+import  Home from './routes/Home';
+import  NotFound  from './routes/NotFound';
+import About from './routes/About';
+import { Greeting } from './components/Greeting';
+import { Counter } from './components/Counter';
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const Home = React.lazy(() => import('./routes/Home'));
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+  <BrowserRouter>
+    <nav className="p-4 bg-gray-800 text-white">
+      <Link to="/" className="mr-4">Home</Link>
+      <Link to="/about" className="mr-4">About</Link>
+    </nav>
+    <Routes>
+      <Route path="/" element={
+  <React.Suspense fallback={<div>Loading...</div>}>
+    <Home />
+  </React.Suspense>
+} />
+      <Route path="/about" element={<About />} />
+       <Route path="/home" element={<Navigate to="/" replace />} />
+      <Route path="/not-found" element={<NotFound />} />
+      
+      <Route path="*" element={<Navigate to="/not-found" replace />} />
+    </Routes>
+  </BrowserRouter>
+
   )
 }
 
